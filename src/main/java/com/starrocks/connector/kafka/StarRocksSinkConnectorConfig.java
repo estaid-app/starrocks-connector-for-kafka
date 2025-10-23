@@ -74,7 +74,7 @@ public class StarRocksSinkConnectorConfig {
                 .define(
                         STARROCKS_LOAD_URL,
                         ConfigDef.Type.STRING,
-                        null,
+                        ConfigDef.NO_DEFAULT_VALUE,
                         new ConfigDef.NonEmptyString(),
                         ConfigDef.Importance.HIGH,
                         "starrocks http url",
@@ -129,7 +129,7 @@ public class StarRocksSinkConnectorConfig {
                 ).define(
                         STARROCKS_USERNAME,
                         ConfigDef.Type.STRING,
-                        null,
+                        ConfigDef.NO_DEFAULT_VALUE,
                         new ConfigDef.NonEmptyString(),
                         ConfigDef.Importance.HIGH,
                         "starrocks username",
@@ -140,7 +140,7 @@ public class StarRocksSinkConnectorConfig {
                 ).define(
                         STARROCKS_PASSWORD,
                         ConfigDef.Type.STRING,
-                        null,
+                        ConfigDef.NO_DEFAULT_VALUE,
                         null,
                         ConfigDef.Importance.HIGH,
                         "starrocks password",

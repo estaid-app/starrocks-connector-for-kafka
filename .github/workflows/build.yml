@@ -1,0 +1,43 @@
+name: Build & Release
+on:
+  push:
+    tags:
+      - "v*"
+permissions:
+  contents: write  # needed to create GitHub Releases
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - name: Build (skip tests)
+        run: mvn -B -DskipTests clean package
+      - name: List target files
+        run: ls -lah target || true
+      - name: Verify tarball exists
+        run: |
+          test -f target/starrocks-kafka-connector-plugin.tar.gz || {
+            echo "Expected tar.gz not found. Did you add the assembly plugin + descriptor?"
+            exit 1
+          }
+      - name: Generate checksums
+        run: |
+          cd target
+          sha256sum starrocks-kafka-connector-plugin.tar.gz > starrocks-kafka-connector-plugin.tar.gz.sha256
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: false
+          prerelease: false
+          files: |
+            target/starrocks-kafka-connector-plugin.tar.gz
+            target/starrocks-kafka-connector-plugin.tar.gz.sha256
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
